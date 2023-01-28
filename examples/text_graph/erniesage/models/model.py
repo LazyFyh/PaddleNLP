@@ -12,11 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import pgl
 import paddle
+import paddle.nn as nn
+import numpy as np
+from paddlenlp.transformers import ErniePretrainedModel
+
 from models.encoder import Encoder
 from models.loss import LossFactory
-
-from paddlenlp.transformers import ErnieModel, ErniePretrainedModel
 
 __all__ = ["ErnieSageForLinkPrediction"]
 
@@ -24,7 +27,7 @@ __all__ = ["ErnieSageForLinkPrediction"]
 class ErnieSageForLinkPrediction(ErniePretrainedModel):
     """ErnieSage for link prediction task."""
 
-    def __init__(self, config, config_file):
+    def __init__(self, ernie, config):
         """Model which Based on the PaddleNLP PretrainedModel
 
         Note:
@@ -36,9 +39,9 @@ class ErnieSageForLinkPrediction(ErniePretrainedModel):
             ernie (nn.Layer): the submodule layer of ernie model.
             config (Dict): the config file
         """
-        super(ErnieSageForLinkPrediction, self).__init__(config)
-        self.config_file = config_file
-        self.ernie = ErnieModel(config)
+        super(ErnieSageForLinkPrediction, self).__init__()
+        self.config_file = config
+        self.ernie = ernie
         self.encoder = Encoder.factory(self.config_file, self.ernie)
         self.loss_func = LossFactory(self.config_file)
 

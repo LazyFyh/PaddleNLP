@@ -24,7 +24,6 @@ testpaths = [
     "tests/taskflow",
     "tests/utils",
     "model_zoo",
-    "tests/dataaug",
 ]
 python_files = [
     "test.py",

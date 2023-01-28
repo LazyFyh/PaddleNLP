@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import argparse
-import re
 
 import paddle
 from utils import decoding, load_dict
@@ -55,10 +54,9 @@ def predict(args, ext_model, cls_model, tokenizer, ext_id2label, cls_id2label):
 
     while True:
         input_text = input("input text: \n")
-        input_text = re.sub(" +", "", input_text.strip())
         if not input_text:
             continue
-        if input_text == "quit" or input_text == "exit":
+        if input_text == "quit":
             break
 
         input_text = input_text.strip().replace(" ", "")

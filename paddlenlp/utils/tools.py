@@ -122,7 +122,7 @@ def get_env_device():
     """
     if paddle.is_compiled_with_cuda():
         return "gpu"
-    elif "npu" in paddle.device.get_all_custom_device_type():
+    elif paddle.is_compiled_with_npu():
         return "npu"
     elif paddle.is_compiled_with_rocm():
         return "rocm"

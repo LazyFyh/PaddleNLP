@@ -11,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from __future__ import annotations
 
 import json
 import os
@@ -84,24 +83,19 @@ def main():
 
     # Define dataset pre-process function
     trans_fn = partial(
-        seq_convert_example,
-        tokenizer=tokenizer,
-        label_list=data_args.label_list,
-        max_seq_len=data_args.max_seq_length,
-        dynamic_max_length=data_args.dynamic_max_length,
+        seq_convert_example, tokenizer=tokenizer, label_list=data_args.label_list, max_seq_len=data_args.max_seq_length
     )
 
-    # Define data collator
+    # Define data collector
     data_collator = DataCollatorWithPadding(tokenizer)
 
     # Dataset pre-process
-    logger.info("Data Preprocessing...")
     if training_args.do_train:
-        train_dataset = raw_datasets["train"].map(trans_fn, lazy=training_args.lazy_data_processing)
+        train_dataset = raw_datasets["train"].map(trans_fn)
     if training_args.do_eval:
-        eval_dataset = raw_datasets["dev"].map(trans_fn, lazy=training_args.lazy_data_processing)
+        eval_dataset = raw_datasets["dev"].map(trans_fn)
     if training_args.do_predict:
-        test_dataset = raw_datasets["test"].map(trans_fn, lazy=training_args.lazy_data_processing)
+        test_dataset = raw_datasets["test"].map(trans_fn)
 
     # Define the metrics of tasks.
     def compute_metrics(p):
@@ -172,7 +166,6 @@ def main():
         paddlenlp.transformers.export_model(
             model=trainer.model, input_spec=input_spec, path=model_args.export_model_dir
         )
-        trainer.tokenizer.save_pretrained(model_args.export_model_dir)
 
 
 if __name__ == "__main__":
